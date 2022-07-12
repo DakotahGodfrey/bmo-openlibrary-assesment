@@ -15,6 +15,7 @@ const Search: React.FC<ISearchProps> = ({ searchHandler, value }) => {
         name='search'
         id='search'
         value={value}
+        placeholder={value === "" ? "search" : ""}
         onChange={(e) => searchHandler(e)}
       />
     </form>
@@ -58,7 +59,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ books }) => {
   );
 };
 function App() {
-  const [searchTerm, setSearchTerm] = useState<string>("harry potter");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [books, setBooks] = useState<Docs[]>([]);
   const [loading, setLoading] = useState<"searching" | "idle" | "error">(
     "idle"
@@ -77,19 +78,22 @@ function App() {
     };
     getInitialBooks();
   }, [searchTerm]);
+
   const handleSearch = (e: { target: { value: string } }) => {
     setSearchTerm(e.target.value);
   };
+
   return (
     <div className='app'>
       {/* Header Component */}
-      {/* Search Input */
-      /*Filter Dropdown */}
       <div>
         <Search searchHandler={handleSearch} value={searchTerm} />
       </div>
+
       <main>
-        {loading === "idle" && books.length >= 1 ? (
+        {searchTerm === "" ? (
+          <h2>Please enter a search term</h2>
+        ) : loading === "idle" && books.length >= 1 ? (
           <div>
             <p>Results: {books.length}</p>
             <SearchResults books={books} />
@@ -100,8 +104,6 @@ function App() {
           <h2>Searching</h2>
         )}
       </main>
-      {/* Results Feed */}
-      {/* Page Selection */}
     </div>
   );
 }
