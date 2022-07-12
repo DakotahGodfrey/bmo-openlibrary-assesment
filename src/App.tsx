@@ -38,7 +38,7 @@ function App() {
 
       <main>
         {searchTerm === "" ? (
-          <h2>Please enter a search term</h2>
+          <p>Please enter a search term</p>
         ) : loading === "idle" && books.length >= 1 ? (
           <div>
             <p>Results: {books.length}</p>
