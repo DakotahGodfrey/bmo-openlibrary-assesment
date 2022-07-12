@@ -60,13 +60,20 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ books }) => {
 function App() {
   const [searchTerm, setSearchTerm] = useState<string>("harry potter");
   const [books, setBooks] = useState<Docs[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<"searching" | "idle" | "error">(
+    "idle"
+  );
 
   useEffect(() => {
     const getInitialBooks = async () => {
-      setLoading(true);
-      setBooks(await getBooksByTitle(searchTerm));
-      setLoading(false);
+      setLoading("searching");
+      const results = await getBooksByTitle(searchTerm);
+      if (results.numFound === 0) {
+        setLoading("error");
+        return;
+      }
+      setBooks(results.docs);
+      setLoading("idle");
     };
     getInitialBooks();
   }, [searchTerm]);
@@ -80,14 +87,17 @@ function App() {
       /*Filter Dropdown */}
       <div>
         <Search searchHandler={handleSearch} value={searchTerm} />
-        <p>searchTerm: {searchTerm}</p>
-        <p>Results: </p>
       </div>
       <main>
-        {!loading && books.length >= 1 ? (
-          <SearchResults books={books} />
+        {loading === "idle" && books.length >= 1 ? (
+          <div>
+            <p>Results: {books.length}</p>
+            <SearchResults books={books} />
+          </div>
+        ) : loading === "error" ? (
+          <h2>No Results</h2>
         ) : (
-          <h2>Loading</h2>
+          <h2>Searching</h2>
         )}
       </main>
       {/* Results Feed */}

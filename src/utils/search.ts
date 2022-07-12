@@ -10,7 +10,7 @@ export const getBooksByTitle = async (
   const query = `http://openlibrary.org/search.json?title=${title}&fields=${fields}&limit=${limit}`;
   const res = await fetch(query);
   const data: Data = await res.json();
-  return data.docs;
+  return data;
 };
 
 type Size = "S" | "M" | "L";

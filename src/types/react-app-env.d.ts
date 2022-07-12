@@ -6,4 +6,5 @@ export type Docs = {
 };
 export type Data = {
   docs: Docs[];
+  numFound: number;
 };
