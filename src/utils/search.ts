@@ -15,6 +15,6 @@ export const getBooksByTitle = async (
 
 type Size = "S" | "M" | "L";
 
-export const getBookCovers = (isbn: string, size: Size = "S") => {
+export const getBookCover = (isbn: string, size: Size = "S") => {
   return `https://covers.openlibrary.org/b/isbn/${isbn}-${size}.jpg`;
 };
